@@ -29,7 +29,7 @@ a{color:#9E3324}a:hover{color:#6E2116}
 .btn:hover{filter:brightness(1.08);transform:translateY(-2px)}
 .scene-btn:focus-visible{outline:4px solid #3B2416;outline-offset:-8px}
 
-.cow-box{display:block;margin:clamp(80px,11vh,100px) auto 0}
+.cow-box{display:block;margin:clamp(60px,8vh,72px) auto 0}
 .cow-ring{position:relative;display:inline-block}
 .cow-orbit{position:absolute;left:0;top:0;width:clamp(52px,6vw,68px);pointer-events:none;transform-origin:50% 90%;will-change:transform}
 .cow-hop{display:block;animation:cowHop .58s ease-in-out infinite}
@@ -69,6 +69,12 @@ a{color:#9E3324}a:hover{color:#6E2116}
 .eq i:nth-child(2){animation-delay:.2s !important}.eq i:nth-child(3){animation-delay:.4s !important}
 @keyframes eq{0%,100%{height:4px}50%{height:14px}}
 @media (max-width:420px){.music .lbl{display:none}.music{padding:10px}}
+@media (max-width:600px){
+.pill-top{font-size:11px !important;padding:5px 12px !important;letter-spacing:.05em !important}
+.cow-orbit{width:44px !important}
+.cta{padding:12px 18px !important;font-size:15px !important;gap:8px !important}
+.cta svg{width:20px !important;height:20px !important}
+}
 </style>
 </head>
 <body>
@@ -77,8 +83,8 @@ a{color:#9E3324}a:hover{color:#6E2116}
 <section id="scene">
 <div style="height: 100vh; min-height: 520px; position: relative; overflow: hidden; background: #F7DDA9">
   <button class="scene-btn" id="sceneBtn" aria-label="Lanzar la soga para atrapar al caballo" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background: transparent; cursor: pointer; display: block">
-    <svg viewBox="0 0 1000 560" preserveAspectRatio="xMidYMax slice" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%; display: block">
-      <rect x="-400" y="-300" width="1800" height="900" fill="#F7DDA9"></rect>
+    <svg id="sceneSvg" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMax slice" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%; display: block">
+      <rect x="-400" y="-2000" width="1800" height="2700" fill="#F7DDA9"></rect>
       <circle cx="800" cy="130" r="98" fill="#F2BF6A" opacity="0.45"></circle>
       <circle cx="800" cy="130" r="70" fill="#EBA640"></circle>
       <g fill="#FFF4E0" opacity="0.9">
@@ -104,7 +110,7 @@ a{color:#9E3324}a:hover{color:#6E2116}
         <rect x="580" y="362" width="12" height="70" rx="2"></rect><rect x="690" y="362" width="12" height="70" rx="2"></rect><rect x="800" y="362" width="12" height="70" rx="2"></rect><rect x="910" y="362" width="12" height="70" rx="2"></rect><rect x="1020" y="362" width="12" height="70" rx="2"></rect>
         <rect x="1130" y="362" width="12" height="70" rx="2"></rect><rect x="1240" y="362" width="12" height="70" rx="2"></rect><rect x="1350" y="362" width="12" height="70" rx="2"></rect><rect x="1460" y="362" width="12" height="70" rx="2"></rect>
       </g>
-      <rect x="-400" y="428" width="1800" height="200" fill="#C98B4E"></rect>
+      <rect x="-400" y="428" width="1800" height="700" fill="#C98B4E"></rect>
       <g id="tufts" fill="#B07640">
         <rect x="-460" y="470" width="70" height="8" rx="4"></rect><rect x="-300" y="510" width="110" height="8" rx="4"></rect><rect x="-140" y="452" width="50" height="7" rx="4"></rect>
         <rect x="20" y="470" width="70" height="8" rx="4"></rect><rect x="180" y="510" width="110" height="8" rx="4"></rect><rect x="340" y="452" width="50" height="7" rx="4"></rect>
@@ -158,9 +164,9 @@ a{color:#9E3324}a:hover{color:#6E2116}
     </svg>
   </button>
 
-  <div style="position: absolute; left: 0; right: 0; top: 0; padding: clamp(96px, 14vh, 120px) 20px 0; text-align: center; pointer-events: none">
+  <div style="position: absolute; left: 0; right: 0; top: 0; padding: clamp(64px, 9vh, 80px) 16px 0; text-align: center; pointer-events: none">
     <div id="cowRing" class="cow-ring">
-      <p style="margin: 0 auto; display: inline-block; padding: 6px 16px; border-radius: 999px; background: #9E3324; color: #FFF4E0; font-size: 14px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase"><span id="hello"></span>Primer cumpleaños de Liam</p>
+      <p class="pill-top" style="margin: 0 auto; display: inline-block; padding: 6px 16px; border-radius: 999px; background: #9E3324; color: #FFF4E0; font-size: 14px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase"><span id="hello"></span>Primer cumpleaños de Liam</p>
       <span class="cow-orbit" aria-hidden="true"><span class="cow-hop"><svg class="cow" viewBox="0 0 120 92">
           <g class="cow-tail"><path d="M20 40 C8 38 6 52 10 60" fill="none" stroke="#3B2416" stroke-width="3" stroke-linecap="round"></path><ellipse cx="10" cy="62" rx="4" ry="5" fill="#3B2416"></ellipse></g>
           <g class="cow-leg cow-leg-b"><rect x="28" y="58" width="9" height="24" rx="3" fill="#FFFDF8" stroke="#3B2416" stroke-width="2.5"></rect><rect x="28" y="76" width="9" height="7" rx="2" fill="#3B2416"></rect></g>
@@ -184,15 +190,15 @@ a{color:#9E3324}a:hover{color:#6E2116}
     </div>
     <div class="cow-box">
       <div id="tPlay">
-      <h1 class="pop" style="margin: 0; font-family: 'Rye', serif; font-weight: 400; font-size: clamp(36px, 6vw, 76px); line-height: 1.05; color: #3B2416">¡Atrapa al caballo!</h1>
+      <h1 class="pop" style="margin: 0; font-family: 'Rye', serif; font-weight: 400; font-size: clamp(28px, 4.6vw, 58px); line-height: 1.05; color: #3B2416">¡Atrapa al caballo!</h1>
     </div>
     <div id="tCaught" hidden>
-      <h1 class="pop" style="margin: 0; font-family: 'Rye', serif; font-weight: 400; font-size: clamp(40px, 7vw, 88px); line-height: 1.05; color: #9E3324">¡Lo atrapaste!</h1>
+      <h1 class="pop" style="margin: 0; font-family: 'Rye', serif; font-weight: 400; font-size: clamp(30px, 5.2vw, 64px); line-height: 1.05; color: #9E3324">¡Lo atrapaste!</h1>
     </div>
     </div>
   </div>
 
-  <div style="position: absolute; left: 0; right: 0; bottom: clamp(24px, 6vh, 64px); display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 0 20px; pointer-events: none">
+  <div style="position: absolute; left: 0; right: 0; bottom: clamp(16px, 4vh, 48px); display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 0 20px; pointer-events: none">
     <div class="playOnly">
       <span class="cta" style="display: inline-flex; align-items: center; gap: 12px; padding: 16px 28px; border-radius: 999px; background: #3B2416; color: #FFF4E0; font-size: clamp(16px, 2.2vw, 20px); font-weight: 800; box-shadow: 0 6px 0 #22120A">
         <svg aria-hidden="true" viewBox="0 0 24 24" style="width: 26px; height: 26px" fill="none" stroke="#E7B66B" stroke-width="2" stroke-linecap="round"><ellipse cx="14" cy="8" rx="7" ry="4"></ellipse><path d="M8 10 C6 14 4 17 3 21"></path></svg>
@@ -627,6 +633,19 @@ a{color:#9E3324}a:hover{color:#6E2116}
     requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
+})();
+
+/* Encuadre del campo en pantallas verticales (teléfono) */
+(function () {
+  var svg = document.getElementById('sceneSvg');
+  if (!svg) return;
+  function fit() {
+    var tall = window.innerWidth / Math.max(1, window.innerHeight) < 1.15;
+    svg.setAttribute('viewBox', tall ? '190 60 620 660' : '0 -80 1000 640');
+    svg.setAttribute('preserveAspectRatio', tall ? 'xMidYMax meet' : 'xMidYMax slice');
+  }
+  fit();
+  window.addEventListener('resize', fit);
 })();
 </script>
 </body>
