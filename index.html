@@ -28,6 +28,47 @@ a{color:#9E3324}a:hover{color:#6E2116}
 .btn{transition:transform .15s ease, filter .15s ease}
 .btn:hover{filter:brightness(1.08);transform:translateY(-2px)}
 .scene-btn:focus-visible{outline:4px solid #3B2416;outline-offset:-8px}
+
+.cow-box{display:block;margin:clamp(80px,11vh,100px) auto 0}
+.cow-ring{position:relative;display:inline-block}
+.cow-orbit{position:absolute;left:0;top:0;width:clamp(52px,6vw,68px);pointer-events:none;transform-origin:50% 90%;will-change:transform}
+.cow-hop{display:block;animation:cowHop .58s ease-in-out infinite}
+.cow{display:block;width:100%;height:auto;overflow:visible}
+.cow-leg{transform-box:fill-box;transform-origin:50% 0}
+.cow-leg-a{animation:cowLeg .29s ease-in-out infinite alternate}
+.cow-leg-b{animation:cowLeg .29s ease-in-out infinite alternate-reverse}
+.cow-tail{transform-box:fill-box;transform-origin:100% 0;animation:cowTail .4s ease-in-out infinite alternate}
+.cow-head{transform-box:fill-box;transform-origin:0 100%;animation:cowHead .58s ease-in-out infinite}
+@keyframes cowHop{0%,100%{transform:translateY(0) rotate(0)}45%{transform:translateY(-16%) rotate(-6deg)}}
+@keyframes cowLeg{from{transform:rotate(-24deg)}to{transform:rotate(24deg)}}
+@keyframes cowTail{from{transform:rotate(-20deg)}to{transform:rotate(25deg)}}
+@keyframes cowHead{0%,100%{transform:rotate(0)}50%{transform:rotate(-6deg)}}
+.rsvp{background:#FFF6E6;border:3px solid #3B2416;border-radius:24px;padding:clamp(22px,4vw,40px);display:flex;flex-direction:column;gap:22px;box-shadow:8px 8px 0 #D9A066;scroll-margin-top:20px}
+#rsvpForm{display:flex;flex-direction:column;gap:18px;max-width:560px;width:100%;margin:0 auto}
+.field{display:flex;flex-direction:column;gap:8px;border:0;padding:0;margin:0;min-width:0}
+.field label,.field legend{font-size:15px;font-weight:800;color:#3B2416;padding:0}
+.field input[type=text],.field input[type=tel],.field input[type=number],.field textarea{font:inherit;font-size:17px;color:#3B2416;background:#FFFDF8;border:2px solid #7A5236;border-radius:12px;padding:12px 14px;min-height:48px;box-sizing:border-box;width:100%}
+.field textarea{resize:vertical}
+.field input:focus-visible,.field textarea:focus-visible,.choice input:focus-visible+span{outline:3px solid #9E3324;outline-offset:2px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.choice-row{display:flex;flex-wrap:wrap;gap:10px}
+.choice{position:relative;cursor:pointer}
+.choice input{position:absolute;opacity:0;width:1px;height:1px}
+.choice span{display:inline-flex;align-items:center;min-height:48px;padding:10px 20px;border-radius:999px;border:2px solid #3B2416;background:#FFFDF8;font-weight:800}
+.choice input:checked+span{background:#3B2416;color:#FFF4E0}
+.send{font:inherit;font-size:18px;font-weight:800;min-height:54px;border-radius:999px;border:0;background:#9E3324;color:#FFF4E0;cursor:pointer;box-shadow:0 6px 0 #6E2116}
+.send[disabled]{opacity:.7;cursor:wait}
+.ghost{font:inherit;font-size:16px;font-weight:800;min-height:48px;padding:10px 22px;border-radius:999px;border:2px solid #3B2416;background:transparent;color:#3B2416;cursor:pointer}
+.status{margin:0;min-height:1.4em;text-align:center;font-weight:600}
+.status.err{color:#9E3324}
+.music{position:fixed;right:16px;bottom:16px;z-index:50;display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:10px 18px 10px 12px;border-radius:999px;border:2px solid #E7B66B;background:#3B2416;color:#FFF4E0;font:800 15px 'Bitter',Georgia,serif;cursor:pointer;box-shadow:0 4px 0 #22120A}
+.music .ico{width:28px;height:28px;border-radius:50%;background:#E7B66B;display:inline-flex;align-items:center;justify-content:center}
+.music.on .eq i{animation:eq .8s ease-in-out infinite}
+.eq{display:inline-flex;align-items:flex-end;gap:2px;height:14px}
+.eq i{display:block;width:3px;height:5px;background:#3B2416;border-radius:1px}
+.eq i:nth-child(2){animation-delay:.2s !important}.eq i:nth-child(3){animation-delay:.4s !important}
+@keyframes eq{0%,100%{height:4px}50%{height:14px}}
+@media (max-width:420px){.music .lbl{display:none}.music{padding:10px}}
 </style>
 </head>
 <body>
@@ -117,13 +158,37 @@ a{color:#9E3324}a:hover{color:#6E2116}
     </svg>
   </button>
 
-  <div style="position: absolute; left: 0; right: 0; top: 0; padding: clamp(20px, 5vh, 56px) 20px 0; text-align: center; pointer-events: none">
-    <p style="margin: 0 auto; display: inline-block; padding: 6px 16px; border-radius: 999px; background: #9E3324; color: #FFF4E0; font-size: 14px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase">Primer cumpleaños de Liam</p>
-    <div id="tPlay">
-      <h1 class="pop" style="margin: 12px 0 0; font-family: 'Rye', serif; font-weight: 400; font-size: clamp(36px, 6vw, 76px); line-height: 1.05; color: #3B2416">¡Atrapa al caballo!</h1>
+  <div style="position: absolute; left: 0; right: 0; top: 0; padding: clamp(96px, 14vh, 120px) 20px 0; text-align: center; pointer-events: none">
+    <div id="cowRing" class="cow-ring">
+      <p style="margin: 0 auto; display: inline-block; padding: 6px 16px; border-radius: 999px; background: #9E3324; color: #FFF4E0; font-size: 14px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase"><span id="hello"></span>Primer cumpleaños de Liam</p>
+      <span class="cow-orbit" aria-hidden="true"><span class="cow-hop"><svg class="cow" viewBox="0 0 120 92">
+          <g class="cow-tail"><path d="M20 40 C8 38 6 52 10 60" fill="none" stroke="#3B2416" stroke-width="3" stroke-linecap="round"></path><ellipse cx="10" cy="62" rx="4" ry="5" fill="#3B2416"></ellipse></g>
+          <g class="cow-leg cow-leg-b"><rect x="28" y="58" width="9" height="24" rx="3" fill="#FFFDF8" stroke="#3B2416" stroke-width="2.5"></rect><rect x="28" y="76" width="9" height="7" rx="2" fill="#3B2416"></rect></g>
+          <g class="cow-leg cow-leg-a"><rect x="70" y="58" width="9" height="24" rx="3" fill="#FFFDF8" stroke="#3B2416" stroke-width="2.5"></rect><rect x="70" y="76" width="9" height="7" rx="2" fill="#3B2416"></rect></g>
+          <rect x="18" y="30" width="72" height="36" rx="18" fill="#FFFDF8" stroke="#3B2416" stroke-width="3"></rect>
+          <path d="M34 31 C40 38 50 36 52 31 Z M62 52 C66 44 78 44 80 52 C76 60 66 60 62 52 Z M24 50 C28 46 34 50 32 58 C28 60 24 56 24 50 Z" fill="#3B2416"></path>
+          <ellipse cx="56" cy="64" rx="7" ry="4" fill="#F4A7A0" stroke="#3B2416" stroke-width="2"></ellipse>
+          <g class="cow-leg cow-leg-a"><rect x="38" y="58" width="9" height="24" rx="3" fill="#FFFDF8" stroke="#3B2416" stroke-width="2.5"></rect><rect x="38" y="76" width="9" height="7" rx="2" fill="#3B2416"></rect></g>
+          <g class="cow-leg cow-leg-b"><rect x="80" y="58" width="9" height="24" rx="3" fill="#FFFDF8" stroke="#3B2416" stroke-width="2.5"></rect><rect x="80" y="76" width="9" height="7" rx="2" fill="#3B2416"></rect></g>
+          <g class="cow-head">
+            <path d="M88 14 C86 6 92 4 94 10 M106 14 C108 6 114 6 112 12" fill="none" stroke="#E7B66B" stroke-width="4" stroke-linecap="round"></path>
+            <ellipse cx="86" cy="22" rx="8" ry="4" transform="rotate(-25 86 22)" fill="#FFFDF8" stroke="#3B2416" stroke-width="2.5"></ellipse>
+            <rect x="84" y="12" width="30" height="34" rx="14" fill="#FFFDF8" stroke="#3B2416" stroke-width="3"></rect>
+            <path d="M98 13 C104 18 110 16 112 14 C112 22 104 26 98 13 Z" fill="#3B2416"></path>
+            <circle cx="104" cy="26" r="3.2" fill="#1A0E06"></circle><circle cx="105" cy="25" r="1" fill="#FFF4E0"></circle>
+            <ellipse cx="104" cy="42" rx="14" ry="9" fill="#F4A7A0" stroke="#3B2416" stroke-width="2.5"></ellipse>
+            <circle cx="99" cy="42" r="1.8" fill="#3B2416"></circle><circle cx="109" cy="42" r="1.8" fill="#3B2416"></circle>
+            <circle cx="88" cy="52" r="5" fill="#E7B66B" stroke="#3B2416" stroke-width="2"></circle>
+          </g>
+        </svg></span></span>
+    </div>
+    <div class="cow-box">
+      <div id="tPlay">
+      <h1 class="pop" style="margin: 0; font-family: 'Rye', serif; font-weight: 400; font-size: clamp(36px, 6vw, 76px); line-height: 1.05; color: #3B2416">¡Atrapa al caballo!</h1>
     </div>
     <div id="tCaught" hidden>
-      <h1 class="pop" style="margin: 12px 0 0; font-family: 'Rye', serif; font-weight: 400; font-size: clamp(40px, 7vw, 88px); line-height: 1.05; color: #9E3324">¡Lo atrapaste!</h1>
+      <h1 class="pop" style="margin: 0; font-family: 'Rye', serif; font-weight: 400; font-size: clamp(40px, 7vw, 88px); line-height: 1.05; color: #9E3324">¡Lo atrapaste!</h1>
+    </div>
     </div>
   </div>
 
@@ -154,9 +219,9 @@ a{color:#9E3324}a:hover{color:#6E2116}
         <rect x="38" y="32" width="44" height="6" fill="#6E2116"></rect>
       </svg>
       <p style="margin: 0; font-family: 'Rye', serif; font-size: clamp(22px, 3.4vw, 34px)">¡Yeehaw, vaqueros y vaqueras!</p>
-      <p style="margin: 0; font-size: clamp(16px, 2vw, 20px); font-weight: 600; color: #FFE7C2">Están invitados al primer cumpleaños de</p>
+      <p style="margin: 0; font-size: clamp(16px, 2vw, 20px); font-weight: 600; color: #FFE7C2" id="invitedLine">Están invitados al primer cumpleaños de</p>
       <div style="display: flex; align-items: center; justify-content: center; gap: clamp(12px, 3vw, 28px); flex-wrap: wrap">
-        <p style="margin: 0; font-family: 'Rye', serif; font-size: clamp(84px, 16vw, 170px); line-height: 1; color: #FFF4E0; text-shadow: 6px 6px 0 #3B2416">Liam</p>
+        <p style="margin: 0; font-family: 'Rye', serif; font-size: clamp(84px, 16vw, 170px); line-height: 1; color: #FFF4E0; text-shadow: 6px 6px 0 #3B2416; position: relative; display: inline-block">Liam</p>
         <svg role="img" aria-label="Cumple 1 añito" viewBox="0 0 120 120" style="width: clamp(96px, 13vw, 140px); height: clamp(96px, 13vw, 140px)">
           <polygon points="60.0,12.0 73.5,36.6 101.6,36.0 87.0,60.0 101.6,84.0 73.5,83.4 60.0,108.0 46.5,83.4 18.4,84.0 33.0,60.0 18.4,36.0 46.5,36.6" fill="#E7B66B" stroke="#3B2416" stroke-width="3" stroke-linejoin="round"></polygon>
           <circle cx="60" cy="10" r="6" fill="#E7B66B" stroke="#3B2416" stroke-width="3"></circle><circle cx="103.3" cy="35" r="6" fill="#E7B66B" stroke="#3B2416" stroke-width="3"></circle><circle cx="103.3" cy="85" r="6" fill="#E7B66B" stroke="#3B2416" stroke-width="3"></circle><circle cx="60" cy="110" r="6" fill="#E7B66B" stroke="#3B2416" stroke-width="3"></circle><circle cx="16.7" cy="85" r="6" fill="#E7B66B" stroke="#3B2416" stroke-width="3"></circle><circle cx="16.7" cy="35" r="6" fill="#E7B66B" stroke="#3B2416" stroke-width="3"></circle>
@@ -222,10 +287,59 @@ a{color:#9E3324}a:hover{color:#6E2116}
           <svg aria-hidden="true" viewBox="0 0 24 24" style="width: 20px; height: 20px" fill="none" stroke="#3B2416" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"></path><circle cx="12" cy="9.5" r="2.5"></circle></svg>
           Cómo llegar
         </a>
+        <a class="btn" href="#rsvp" style="display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 12px 22px; border-radius: 999px; background: #9E3324; color: #FFF4E0; font-size: 16px; font-weight: 800; text-decoration: none; border: 2px solid #E7B66B">
+          <svg aria-hidden="true" viewBox="0 0 24 24" style="width: 20px; height: 20px" fill="none" stroke="#FFF4E0" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"></path></svg>
+          Confirmar asistencia
+        </a>
         <button class="btn" id="replay" style="display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 12px 22px; border-radius: 999px; border: 2px solid #E7B66B; background: transparent; color: #FFF4E0; font-family: 'Bitter', serif; font-size: 16px; font-weight: 800; cursor: pointer">
           <svg aria-hidden="true" viewBox="0 0 24 24" style="width: 20px; height: 20px" fill="none" stroke="#E7B66B" stroke-width="2" stroke-linecap="round"><ellipse cx="14" cy="8" rx="7" ry="4"></ellipse><path d="M8 10 C6 14 4 17 3 21"></path></svg>
           Atrapar al caballo otra vez
         </button>
+      </div>
+    </section>
+
+    <section id="rsvp" class="up4 rsvp" aria-labelledby="rsvpTitle">
+      <div style="text-align: center; display: flex; flex-direction: column; gap: 8px">
+        <h2 id="rsvpTitle" style="margin: 0; font-family: 'Rye', serif; font-weight: 400; font-size: clamp(28px, 4vw, 40px); color: #9E3324">Confirma tu asistencia</h2>
+        <p style="margin: 0; font-size: 17px">Cuéntanos si vienes para preparar todo, vaquero.</p>
+      </div>
+      <form id="rsvpForm" novalidate>
+        <div class="field">
+          <label for="fNombre">Tu nombre</label>
+          <input id="fNombre" name="nombre" type="text" autocomplete="name" maxlength="80" required placeholder="Nombre y apellido">
+        </div>
+        <fieldset class="field">
+          <legend>¿Vienes a la fiesta?</legend>
+          <div class="choice-row">
+            <label class="choice"><input type="radio" name="asiste" value="si" checked><span>¡Sí, ahí estaré!</span></label>
+            <label class="choice"><input type="radio" name="asiste" value="no"><span>No podré ir</span></label>
+          </div>
+        </fieldset>
+        <div id="countRow" class="grid2">
+          <div class="field">
+            <label for="fAdultos">Adultos</label>
+            <input id="fAdultos" name="adultos" type="number" inputmode="numeric" min="0" max="30" value="1">
+          </div>
+          <div class="field">
+            <label for="fNinos">Niños</label>
+            <input id="fNinos" name="ninos" type="number" inputmode="numeric" min="0" max="30" value="0">
+          </div>
+        </div>
+        <div class="field">
+          <label for="fTel">Teléfono (opcional)</label>
+          <input id="fTel" name="telefono" type="tel" autocomplete="tel" maxlength="30" placeholder="6000-0000">
+        </div>
+        <div class="field">
+          <label for="fMsg">Mensaje para Liam (opcional)</label>
+          <textarea id="fMsg" name="mensaje" rows="3" maxlength="500" placeholder="¡Feliz primer añito!"></textarea>
+        </div>
+        <button id="rsvpSubmit" class="btn send" type="submit">Enviar confirmación</button>
+        <p id="rsvpStatus" role="status" aria-live="polite" class="status"></p>
+      </form>
+      <div id="rsvpDone" hidden style="text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px">
+        <svg aria-hidden="true" viewBox="0 0 24 24" style="width: 56px; height: 56px" fill="none" stroke="#9E3324" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M7 12.5l3.2 3.2L17 9"></path></svg>
+        <p id="rsvpDoneText" style="margin: 0; font-family: 'Rye', serif; font-size: 26px">¡Gracias! Tu respuesta quedó registrada.</p>
+        <button id="rsvpAgain" class="btn ghost" type="button">Cambiar mi respuesta</button>
       </div>
     </section>
   </main>
@@ -240,6 +354,12 @@ a{color:#9E3324}a:hover{color:#6E2116}
 </section>
 
 </div>
+<audio id="bgm" src="assets/the-country-boy.mp3" loop preload="auto"></audio>
+<button id="musicBtn" class="music" type="button" aria-pressed="false" aria-label="Reproducir música">
+  <span class="ico"><svg id="icoPlay" aria-hidden="true" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M8 5l11 7-11 7z" fill="#3B2416"></path></svg><span id="icoPause" class="eq" hidden><i></i><i></i><i></i></span></span>
+  <span class="lbl" id="musicLbl">Música</span>
+</button>
+<script src="config.js"></script>
 <script>
 (function () {
   var $ = function (id) { return document.getElementById(id); };
@@ -384,6 +504,130 @@ a{color:#9E3324}a:hover{color:#6E2116}
   requestAnimationFrame(frame);
 })();
 
+/* Nombre personalizado, música y RSVP */
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var qs = new URLSearchParams(location.search);
+  var para = (qs.get('para') || '').trim().slice(0, 60);
+  var gid = (qs.get('id') || '').replace(/[^A-Za-z0-9]/g, '').slice(0, 20);
+  var store = {
+    get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  };
+
+  if (para) {
+    $('hello').textContent = '¡Hola, ' + para + '! · ';
+    $('invitedLine').textContent = para + ', estás invitado al primer cumpleaños de';
+    $('fNombre').value = para;
+    document.title = para + ', ¡estás invitado al primer cumpleaños de Liam!';
+  }
+
+  /* Música: intenta sonar al abrir; si el navegador lo bloquea, arranca con el primer toque */
+  var audio = $('bgm'), btn = $('musicBtn'), userPaused = false;
+  audio.volume = 0.55;
+  function paint() {
+    var on = !audio.paused;
+    btn.classList.toggle('on', on);
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    btn.setAttribute('aria-label', on ? 'Pausar música' : 'Reproducir música');
+    $('musicLbl').textContent = on ? 'Pausar' : 'Música';
+    $('icoPlay').style.display = on ? 'none' : '';
+    $('icoPause').hidden = !on;
+  }
+  function tryPlay() {
+    if (userPaused) return;
+    var pr = audio.play();
+    if (pr && pr.catch) pr.catch(function () {});
+  }
+  audio.addEventListener('play', paint);
+  audio.addEventListener('pause', paint);
+  var unlockEvents = ['pointerdown', 'keydown', 'touchstart'];
+  function unlock(e) {
+    if (btn.contains(e.target)) return;
+    tryPlay();
+    unlockEvents.forEach(function (ev) { document.removeEventListener(ev, unlock, true); });
+  }
+  unlockEvents.forEach(function (ev) { document.addEventListener(ev, unlock, true); });
+  btn.addEventListener('click', function () {
+    if (audio.paused) { userPaused = false; audio.play().catch(function () {}); }
+    else { userPaused = true; audio.pause(); }
+  });
+  paint();
+  tryPlay();
+
+  /* RSVP */
+  var form = $('rsvpForm'), status = $('rsvpStatus'), submit = $('rsvpSubmit');
+  var cfg = window.CUMPLE_CONFIG || {};
+  var doneKey = 'rsvp-liam-' + (gid || para || 'general');
+  function asiste() { var r = form.querySelector('input[name=asiste]:checked'); return r ? r.value : 'si'; }
+  function syncCounts() { $('countRow').style.display = asiste() === 'si' ? '' : 'none'; }
+  form.querySelectorAll('input[name=asiste]').forEach(function (r) { r.addEventListener('change', syncCounts); });
+  syncCounts();
+  function showDone(name, yes) {
+    form.hidden = true; $('rsvpDone').hidden = false;
+    $('rsvpDoneText').textContent = yes
+      ? '¡Gracias, ' + name + '! Te esperamos en el rancho.'
+      : '¡Gracias por avisar, ' + name + '! Te vamos a extrañar.';
+  }
+  var prev = store.get(doneKey);
+  if (prev) { try { var pv = JSON.parse(prev); showDone(pv.n, pv.y); } catch (e) {} }
+  $('rsvpAgain').addEventListener('click', function () { form.hidden = false; $('rsvpDone').hidden = true; status.textContent = ''; });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var nombre = $('fNombre').value.trim();
+    status.className = 'status';
+    if (!nombre) { status.className = 'status err'; status.textContent = 'Escribe tu nombre, por favor.'; $('fNombre').focus(); return; }
+    var url = (cfg.SCRIPT_URL || '').trim();
+    if (!/^https:\/\/script\.google\.com\//.test(url)) {
+      status.className = 'status err';
+      status.textContent = 'El formulario todavía no está conectado. Avísale al organizador.';
+      return;
+    }
+    var yes = asiste() === 'si';
+    var data = {
+      action: 'rsvp', nombre: nombre, asiste: yes ? 'si' : 'no',
+      adultos: yes ? $('fAdultos').value : 0, ninos: yes ? $('fNinos').value : 0,
+      telefono: $('fTel').value.trim(), mensaje: $('fMsg').value.trim(),
+      invitadoId: gid, invitado: para
+    };
+    submit.disabled = true; status.textContent = 'Enviando…';
+    fetch(url, { method: 'POST', body: JSON.stringify(data) })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d || !d.ok) throw new Error((d && d.error) || 'error');
+        store.set(doneKey, JSON.stringify({ n: nombre, y: yes }));
+        showDone(nombre, yes);
+      })
+      .catch(function () {
+        status.className = 'status err';
+        status.textContent = 'No se pudo enviar. Revisa tu conexión e inténtalo de nuevo.';
+      })
+      .then(function () { submit.disabled = false; if (status.textContent === 'Enviando…') status.textContent = ''; });
+  });
+})();
+
+/* Vaquita corriendo en círculo alrededor de "Primer cumpleaños" */
+(function () {
+  var ring = document.getElementById('cowRing');
+  var cow = ring && ring.querySelector('.cow-orbit');
+  if (!cow) return;
+  var t0 = performance.now();
+  function step(ts) {
+    var pill = ring.firstElementChild;
+    var r = pill.offsetHeight / 2 + 1, a = Math.max(0, pill.offsetWidth / 2 - pill.offsetHeight / 2);
+    var L = 2 * a, arc = Math.PI * r, P = 2 * L + 2 * arc;
+    var s = ((ts - t0) / 1000 * 150) % P, x, y, ang;
+    if (s < L) { x = -a + s; y = -r; ang = 0; }
+    else if (s < L + arc) { var p1 = -Math.PI / 2 + (s - L) / r; x = a + r * Math.cos(p1); y = r * Math.sin(p1); ang = p1 * 180 / Math.PI + 90; }
+    else if (s < 2 * L + arc) { x = a - (s - L - arc); y = r; ang = 180; }
+    else { var p2 = Math.PI / 2 + (s - 2 * L - arc) / r; x = -a + r * Math.cos(p2); y = r * Math.sin(p2); ang = p2 * 180 / Math.PI + 90; }
+    x += pill.offsetLeft + pill.offsetWidth / 2; y += pill.offsetTop + pill.offsetHeight / 2;
+    cow.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) translate(-50%,-90%) rotate(' + ang.toFixed(1) + 'deg)';
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+})();
 </script>
 </body>
 </html>

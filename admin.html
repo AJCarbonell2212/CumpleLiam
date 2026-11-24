@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Panel de invitaciones — Cumpleaños de Liam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rye&family=Bitter:wght@400;600;800&display=swap">
+<style>
+[hidden]{display:none !important}
+*{box-sizing:border-box}
+body{margin:0;background:#F3E2C0;color:#3B2416;font-family:'Bitter',Georgia,serif}
+a{color:#9E3324}
+header{background:#9E3324;color:#FFF4E0;padding:22px 20px}
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:0}
+h1{margin:0;font-family:'Rye',serif;font-weight:400;font-size:clamp(24px,3.4vw,34px)}
+h2{margin:0 0 14px;font-family:'Rye',serif;font-weight:400;font-size:24px}
+main{padding:28px 0 60px}
+.card{background:#FFF6E6;border:3px solid #3B2416;border-radius:20px;padding:22px;box-shadow:6px 6px 0 #D9A066;margin-bottom:26px}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end}
+.field{display:flex;flex-direction:column;gap:6px;flex:1 1 220px;min-width:0}
+label{font-size:14px;font-weight:800}
+input,textarea{font:inherit;font-size:16px;color:#3B2416;background:#FFFDF8;border:2px solid #7A5236;border-radius:12px;padding:10px 12px;min-height:46px;width:100%}
+textarea{resize:vertical}
+input:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid #3B2416;outline-offset:2px}
+.btn{font:inherit;font-size:15px;font-weight:800;min-height:46px;padding:10px 18px;border-radius:999px;border:2px solid #3B2416;background:#3B2416;color:#FFF4E0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;white-space:nowrap}
+.btn.red{background:#9E3324;border-color:#9E3324}
+.btn.light{background:#FFFDF8;color:#3B2416}
+.btn.small{min-height:40px;padding:6px 14px;font-size:14px}
+.btn.wa{background:#1F7A4A;border-color:#1F7A4A;color:#FFF}
+.btn[disabled]{opacity:.6;cursor:wait}
+header .btn{border-color:#FFF4E0;background:transparent}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:26px}
+.stat{background:#3B2416;color:#FFF4E0;border-radius:16px;padding:16px}
+.stat b{display:block;font-family:'Rye',serif;font-weight:400;font-size:38px;line-height:1}
+.stat span{font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#E7B66B}
+.tbl{overflow-x:auto;border:2px solid #E4CFA8;border-radius:14px;background:#FFFDF8}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid #E4CFA8;vertical-align:middle}
+th{background:#F3E2C0;font-size:13px;letter-spacing:.04em;text-transform:uppercase}
+tr:last-child td{border-bottom:0}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:13px;font-weight:800}
+.pill.si{background:#DDEFD9;color:#1F5A33}
+.pill.no{background:#F6D6CF;color:#7A2418}
+.pill.pend{background:#EEE3CC;color:#5A4026}
+.msg{margin:10px 0 0;min-height:1.3em;font-weight:600}
+.msg.err{color:#9E3324}
+.hint{font-size:13px;color:#6B4A30;margin:6px 0 0}
+.empty{padding:18px;text-align:center;color:#6B4A30}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-bottom:12px}
+.toolbar h2{margin:0}
+.login{max-width:460px;margin:40px auto}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Panel de invitaciones · Liam</h1>
+    <div class="acts">
+      <a class="btn small" href="./" target="_blank" rel="noopener">Ver invitación</a>
+      <button id="logout" class="btn small" type="button" hidden>Salir</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="loginBox" class="card login" aria-labelledby="loginT">
+    <h2 id="loginT">Entrar al panel</h2>
+    <form id="loginForm" class="row">
+      <div class="field">
+        <label for="key">Clave del panel</label>
+        <input id="key" type="password" autocomplete="current-password" required>
+      </div>
+      <button class="btn red" type="submit">Entrar</button>
+    </form>
+    <p id="loginMsg" class="msg" role="status"></p>
+    <p class="hint">Es la clave que pusiste en ADMIN_KEY dentro de Apps Script.</p>
+  </section>
+
+  <div id="app" hidden>
+    <div class="stats" aria-label="Resumen">
+      <div class="stat"><b id="sInv">0</b><span>Invitados</span></div>
+      <div class="stat"><b id="sSi">0</b><span>Confirmaron</span></div>
+      <div class="stat"><b id="sAd">0</b><span>Adultos</span></div>
+      <div class="stat"><b id="sNi">0</b><span>Niños</span></div>
+      <div class="stat"><b id="sNo">0</b><span>No van</span></div>
+      <div class="stat"><b id="sPe">0</b><span>Pendientes</span></div>
+    </div>
+
+    <section class="card" aria-labelledby="addT">
+      <h2 id="addT">Agregar invitado</h2>
+      <form id="addForm" class="row">
+        <div class="field">
+          <label for="gNombre">Nombre</label>
+          <input id="gNombre" type="text" maxlength="80" required placeholder="Ej. Familia Pérez">
+        </div>
+        <div class="field">
+          <label for="gTel">WhatsApp (opcional)</label>
+          <input id="gTel" type="tel" maxlength="20" placeholder="50760000000">
+        </div>
+        <button class="btn red" type="submit">Agregar</button>
+      </form>
+      <p class="hint">El número va con código de país y sin espacios (Panamá: 507 + número).</p>
+      <p id="addMsg" class="msg" role="status"></p>
+    </section>
+
+    <section class="card" aria-labelledby="tplT">
+      <h2 id="tplT">Mensaje de WhatsApp</h2>
+      <div class="field">
+        <label for="tpl">Texto del mensaje</label>
+        <textarea id="tpl" rows="3"></textarea>
+      </div>
+      <p class="hint">Usa {nombre} y {enlace}; se reemplazan por cada invitado.</p>
+    </section>
+
+    <section class="card" aria-labelledby="gT">
+      <div class="toolbar">
+        <h2 id="gT">Invitados</h2>
+        <div class="acts">
+          <button id="refresh" class="btn light small" type="button">Actualizar</button>
+          <button id="excel" class="btn small" type="button">Descargar Excel</button>
+        </div>
+      </div>
+      <div class="field" style="margin-bottom:12px">
+        <label for="search">Buscar</label>
+        <input id="search" type="search" placeholder="Nombre del invitado">
+      </div>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Nombre</th><th>Estado</th><th>Personas</th><th>Enviar</th></tr></thead>
+          <tbody id="gBody"></tbody>
+        </table>
+      </div>
+      <p id="listMsg" class="msg" role="status"></p>
+    </section>
+
+    <section class="card" aria-labelledby="rT">
+      <h2 id="rT">Confirmaciones recibidas</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Fecha</th><th>Nombre</th><th>Asiste</th><th>Adultos</th><th>Niños</th><th>Teléfono</th><th>Mensaje</th></tr></thead>
+          <tbody id="rBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var cfg = window.CUMPLE_CONFIG || {};
+  var URL_ = (cfg.SCRIPT_URL || '').trim();
+  var ss = {
+    get: function (k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } },
+    set: function (k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} },
+    del: function (k) { try { sessionStorage.removeItem(k); } catch (e) {} }
+  };
+  var ls = {
+    get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  };
+  var KEY = ss.get('liam-admin-key') || '';
+  var data = { guests: [], rsvps: [] };
+  var BASE = new URL('./', location.href).href;
+  var DEFAULT_TPL = '¡Yeehaw, {nombre}! Te invitamos al primer cumpleaños de Liam: sábado 30 de enero, 3:00 p.m., en Nuevo Emperador. Abre tu invitación y confirma aquí: {enlace}';
+  $('tpl').value = ls.get('liam-tpl') || DEFAULT_TPL;
+  $('tpl').addEventListener('input', function () { ls.set('liam-tpl', $('tpl').value); });
+
+  function api(body) {
+    if (!/^https:\/\/script\.google\.com\//.test(URL_)) return Promise.reject(new Error('Falta pegar SCRIPT_URL en config.js'));
+    body.key = KEY;
+    return fetch(URL_, { method: 'POST', body: JSON.stringify(body) })
+      .then(function (r) { return r.json(); })
+      .then(function (d) { if (!d.ok) throw new Error(d.error || 'Error'); return d; });
+  }
+  function say(el, txt, err) { el.textContent = txt; el.className = 'msg' + (err ? ' err' : ''); }
+
+  function linkFor(g) { return BASE + '?para=' + encodeURIComponent(g.nombre) + '&id=' + encodeURIComponent(g.id); }
+  function waFor(g) {
+    var text = $('tpl').value.replace(/\{nombre\}/g, g.nombre).replace(/\{enlace\}/g, linkFor(g));
+    var tel = String(g.telefono || '').replace(/[^0-9]/g, '');
+    return 'https://wa.me/' + tel + '?text=' + encodeURIComponent(text);
+  }
+  function latestFor(g) {
+    var hit = null;
+    data.rsvps.forEach(function (r) {
+      var same = (r.invitadoId && String(r.invitadoId) === String(g.id)) ||
+                 (!r.invitadoId && String(r.nombre).trim().toLowerCase() === String(g.nombre).trim().toLowerCase());
+      if (same) hit = r;
+    });
+    return hit;
+  }
+  function el(tag, attrs, text) {
+    var e = document.createElement(tag);
+    for (var k in (attrs || {})) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function pill(r) {
+    if (!r) return el('span', { 'class': 'pill pend' }, 'Pendiente');
+    return String(r.asiste) === 'Sí' ? el('span', { 'class': 'pill si' }, 'Confirmó') : el('span', { 'class': 'pill no' }, 'No va');
+  }
+
+  function render() {
+    var q = $('search').value.trim().toLowerCase();
+    var gb = $('gBody'); gb.textContent = '';
+    var si = 0, no = 0, ad = 0, ni = 0, pe = 0;
+    data.guests.forEach(function (g) {
+      var r = latestFor(g);
+      if (!r) pe++;
+      if (q && String(g.nombre).toLowerCase().indexOf(q) < 0) return;
+      var tr = el('tr');
+      tr.appendChild(el('td', null, g.nombre));
+      var tdS = el('td'); tdS.appendChild(pill(r)); tr.appendChild(tdS);
+      tr.appendChild(el('td', null, r && String(r.asiste) === 'Sí' ? (Number(r.adultos) || 0) + ' adultos · ' + (Number(r.ninos) || 0) + ' niños' : '—'));
+      var tdA = el('td'); var acts = el('div', { 'class': 'acts' });
+      var wa = el('a', { 'class': 'btn wa small', href: waFor(g), target: '_blank', rel: 'noopener' }, 'WhatsApp');
+      var cp = el('button', { 'class': 'btn light small', type: 'button' }, 'Copiar enlace');
+      cp.addEventListener('click', function () {
+        var l = linkFor(g);
+        (navigator.clipboard ? navigator.clipboard.writeText(l) : Promise.reject()).then(function () { cp.textContent = '¡Copiado!'; setTimeout(function () { cp.textContent = 'Copiar enlace'; }, 1500); })
+          .catch(function () { window.prompt('Copia el enlace:', l); });
+      });
+      var del = el('button', { 'class': 'btn light small', type: 'button', 'aria-label': 'Borrar a ' + g.nombre }, 'Borrar');
+      del.addEventListener('click', function () {
+        if (!window.confirm('¿Borrar a ' + g.nombre + ' de la lista?')) return;
+        del.disabled = true;
+        api({ action: 'deleteGuest', id: g.id }).then(load).catch(function (e) { del.disabled = false; say($('listMsg'), e.message, true); });
+      });
+      acts.appendChild(wa); acts.appendChild(cp); acts.appendChild(del); tdA.appendChild(acts); tr.appendChild(tdA);
+      gb.appendChild(tr);
+    });
+    if (!gb.children.length) { var tr0 = el('tr'); var td0 = el('td', { colspan: '4', 'class': 'empty' }, data.guests.length ? 'Nadie coincide con la búsqueda.' : 'Aún no hay invitados. Agrega el primero arriba.'); tr0.appendChild(td0); gb.appendChild(tr0); }
+
+    var rb = $('rBody'); rb.textContent = '';
+    data.rsvps.slice().reverse().forEach(function (r) {
+      var yes = String(r.asiste) === 'Sí';
+      if (yes) { si++; ad += Number(r.adultos) || 0; ni += Number(r.ninos) || 0; } else no++;
+      var tr = el('tr');
+      var d = new Date(r.fecha);
+      tr.appendChild(el('td', null, isNaN(d) ? r.fecha : d.toLocaleString('es-PA', { dateStyle: 'short', timeStyle: 'short' })));
+      tr.appendChild(el('td', null, r.nombre));
+      var tdp = el('td'); tdp.appendChild(pill(r)); tr.appendChild(tdp);
+      tr.appendChild(el('td', null, yes ? String(r.adultos) : '—'));
+      tr.appendChild(el('td', null, yes ? String(r.ninos) : '—'));
+      tr.appendChild(el('td', null, r.telefono || '—'));
+      tr.appendChild(el('td', null, r.mensaje || '—'));
+      rb.appendChild(tr);
+    });
+    if (!data.rsvps.length) { var tr1 = el('tr'); tr1.appendChild(el('td', { colspan: '7', 'class': 'empty' }, 'Todavía nadie ha confirmado.')); rb.appendChild(tr1); }
+    $('sInv').textContent = data.guests.length; $('sSi').textContent = si; $('sAd').textContent = ad;
+    $('sNi').textContent = ni; $('sNo').textContent = no; $('sPe').textContent = pe;
+  }
+
+  function load() {
+    say($('listMsg'), 'Cargando…');
+    return api({ action: 'list' }).then(function (d) {
+      data.guests = d.guests || []; data.rsvps = d.rsvps || [];
+      render(); say($('listMsg'), 'Actualizado ' + new Date().toLocaleTimeString('es-PA', { hour: '2-digit', minute: '2-digit' }));
+    }).catch(function (e) { say($('listMsg'), e.message, true); throw e; });
+  }
+
+  function enter() {
+    $('loginBox').hidden = true; $('app').hidden = false; $('logout').hidden = false;
+  }
+  $('loginForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    KEY = $('key').value;
+    say($('loginMsg'), 'Verificando…');
+    api({ action: 'list' }).then(function (d) {
+      ss.set('liam-admin-key', KEY);
+      data.guests = d.guests || []; data.rsvps = d.rsvps || [];
+      enter(); render(); say($('loginMsg'), '');
+    }).catch(function (err) { say($('loginMsg'), err.message, true); });
+  });
+  $('logout').addEventListener('click', function () { ss.del('liam-admin-key'); location.reload(); });
+
+  $('addForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var nombre = $('gNombre').value.trim();
+    if (!nombre) { say($('addMsg'), 'Escribe un nombre.', true); return; }
+    say($('addMsg'), 'Agregando…');
+    api({ action: 'addGuest', nombre: nombre, telefono: $('gTel').value })
+      .then(function () { $('gNombre').value = ''; $('gTel').value = ''; say($('addMsg'), nombre + ' agregado.'); $('gNombre').focus(); return load(); })
+      .catch(function (err) { say($('addMsg'), err.message, true); });
+  });
+  $('search').addEventListener('input', render);
+  $('refresh').addEventListener('click', function () { load().catch(function () {}); });
+
+  $('excel').addEventListener('click', function () {
+    var guests = data.guests.map(function (g) {
+      var r = latestFor(g);
+      return {
+        Nombre: g.nombre, WhatsApp: g.telefono || '',
+        Estado: !r ? 'Pendiente' : (String(r.asiste) === 'Sí' ? 'Confirmó' : 'No va'),
+        Adultos: r && String(r.asiste) === 'Sí' ? Number(r.adultos) || 0 : 0,
+        'Niños': r && String(r.asiste) === 'Sí' ? Number(r.ninos) || 0 : 0,
+        Enlace: linkFor(g)
+      };
+    });
+    var rsvps = data.rsvps.map(function (r) {
+      var d = new Date(r.fecha);
+      return { Fecha: isNaN(d) ? r.fecha : d.toLocaleString('es-PA'), Nombre: r.nombre, 'Asistirá': r.asiste, Adultos: r.adultos, 'Niños': r.ninos, 'Teléfono': r.telefono, Mensaje: r.mensaje };
+    });
+    if (window.XLSX) {
+      var wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(guests.length ? guests : [{ Nombre: '' }]), 'Invitados');
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rsvps.length ? rsvps : [{ Nombre: '' }]), 'Confirmaciones');
+      XLSX.writeFile(wb, 'cumple-liam-rsvp.xlsx');
+    } else {
+      var rows = rsvps.length ? rsvps : [{ Nombre: '' }];
+      var cols = Object.keys(rows[0]);
+      var csv = [cols.join(',')].concat(rows.map(function (r) { return cols.map(function (c) { return '"' + String(r[c] == null ? '' : r[c]).replace(/"/g, '""') + '"'; }).join(','); })).join('\n');
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' }));
+      a.download = 'cumple-liam-rsvp.csv'; a.click();
+    }
+  });
+
+  if (/[?&]demo=1/.test(location.search) || location.hash === '#demo') {
+    data.guests = [
+      { id: 'a1b2c3d4', nombre: 'Familia Pérez', telefono: '50761234567' },
+      { id: 'e5f6g7h8', nombre: 'Tía Carmen', telefono: '50769876543' },
+      { id: 'i9j0k1l2', nombre: 'Andrés y Sofía', telefono: '' }
+    ];
+    data.rsvps = [
+      { fecha: '2026-12-02T15:20:00Z', nombre: 'Familia Pérez', asiste: 'Sí', adultos: 2, ninos: 1, telefono: '6123-4567', mensaje: '¡Ahí estaremos con botas!', invitadoId: 'a1b2c3d4' },
+      { fecha: '2026-12-03T18:05:00Z', nombre: 'Tía Carmen', asiste: 'No', adultos: 0, ninos: 0, telefono: '', mensaje: 'Un abrazo para Liam', invitadoId: 'e5f6g7h8' }
+    ];
+    api = function () { return Promise.reject(new Error('Vista de ejemplo: conecta Apps Script para guardar cambios.')); };
+    enter(); render(); say($('listMsg'), 'Vista de ejemplo con datos inventados.');
+  } else if (!/^https:\/\/script\.google\.com\//.test(URL_)) {
+    say($('loginMsg'), 'Primero pega la URL de Apps Script en config.js (ver README).', true);
+  } else if (KEY) {
+    api({ action: 'list' }).then(function (d) { data.guests = d.guests || []; data.rsvps = d.rsvps || []; enter(); render(); })
+      .catch(function () { ss.del('liam-admin-key'); KEY = ''; });
+  }
+})();
+</script>
+</body>
+</html>
