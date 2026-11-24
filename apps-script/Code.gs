@@ -11,7 +11,7 @@ const RSVP_HEADERS = ['Fecha', 'Nombre', 'Asistirá', 'Adultos', 'Niños', 'Tel�
 const GUEST_HEADERS = ['ID', 'Nombre', 'Teléfono', 'Creado'];
 
 function doGet() {
-  return json_({ ok: true, msg: 'RSVP de Liam activo' });
+  return json_({ ok: true, msg: 'RSVP de Liam activo', hoja: ss_().getName() });
 }
 
 function doPost(e) {
@@ -57,7 +57,7 @@ function list_() {
   const guests = rows_(SHEET_GUESTS, GUEST_HEADERS).map(function (r) {
     return { id: String(r[0]), nombre: r[1], telefono: String(r[2]), creado: r[3] instanceof Date ? r[3].toISOString() : String(r[3]) };
   });
-  return { ok: true, rsvps: rsvps, guests: guests };
+  return { ok: true, rsvps: rsvps, guests: guests, sheetUrl: ss_().getUrl() };
 }
 
 function addGuest_(d) {
@@ -83,8 +83,27 @@ function requireKey_(d) {
   if (d.key !== ADMIN_KEY) throw new Error('Clave incorrecta');
 }
 
+// Usa la hoja donde está pegado el script; si el script se creó suelto, crea una hoja y la recuerda
+function ss_() {
+  const active = SpreadsheetApp.getActiveSpreadsheet();
+  if (active) return active;
+  const props = PropertiesService.getScriptProperties();
+  const id = props.getProperty('SHEET_ID');
+  if (id) return SpreadsheetApp.openById(id);
+  const ss = SpreadsheetApp.create('Cumpleaños de Liam — RSVP');
+  props.setProperty('SHEET_ID', ss.getId());
+  return ss;
+}
+
+// Ejecuta esta función una vez desde el editor (botón Ejecutar) para crear las pestañas y ver el enlace de la hoja
+function configurar() {
+  sheet_(SHEET_RSVP, RSVP_HEADERS);
+  sheet_(SHEET_GUESTS, GUEST_HEADERS);
+  Logger.log('Hoja lista: ' + ss_().getUrl());
+}
+
 function sheet_(name, headers) {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = ss_();
   let sh = ss.getSheetByName(name);
   if (!sh) {
     sh = ss.insertSheet(name);

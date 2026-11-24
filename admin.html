@@ -61,6 +61,7 @@ tr:last-child td{border-bottom:0}
     <h1>Panel de invitaciones · Liam</h1>
     <div class="acts">
       <a class="btn small" href="./" target="_blank" rel="noopener">Ver invitación</a>
+      <a id="sheetLink" class="btn small" href="#" target="_blank" rel="noopener" hidden>Abrir hoja de Google</a>
       <button id="logout" class="btn small" type="button" hidden>Salir</button>
     </div>
   </div>
@@ -149,7 +150,7 @@ tr:last-child td{border-bottom:0}
   </div>
 </main>
 
-<script src="config.js?v=3"></script>
+<script src="config.js?v=4"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script>
 (function () {
@@ -261,11 +262,14 @@ tr:last-child td{border-bottom:0}
   function load() {
     say($('listMsg'), 'Cargando…');
     return api({ action: 'list' }).then(function (d) {
-      data.guests = d.guests || []; data.rsvps = d.rsvps || [];
+      data.guests = d.guests || []; data.rsvps = d.rsvps || []; showSheet(d);
       render(); say($('listMsg'), 'Actualizado ' + new Date().toLocaleTimeString('es-PA', { hour: '2-digit', minute: '2-digit' }));
     }).catch(function (e) { say($('listMsg'), e.message, true); throw e; });
   }
 
+  function showSheet(d) {
+    if (d && /^https:\/\/docs\.google\.com\//.test(d.sheetUrl || '')) { $('sheetLink').href = d.sheetUrl; $('sheetLink').hidden = false; }
+  }
   function enter() {
     $('loginBox').hidden = true; $('app').hidden = false; $('logout').hidden = false;
   }
@@ -275,7 +279,7 @@ tr:last-child td{border-bottom:0}
     say($('loginMsg'), 'Verificando…');
     api({ action: 'list' }).then(function (d) {
       ss.set('liam-admin-key', KEY);
-      data.guests = d.guests || []; data.rsvps = d.rsvps || [];
+      data.guests = d.guests || []; data.rsvps = d.rsvps || []; showSheet(d);
       enter(); render(); say($('loginMsg'), '');
     }).catch(function (err) { say($('loginMsg'), err.message, true); });
   });
@@ -338,7 +342,7 @@ tr:last-child td{border-bottom:0}
   } else if (!/^https:\/\/script\.google\.com\//.test(URL_)) {
     say($('loginMsg'), 'Primero pega la URL de Apps Script en config.js (ver README).', true);
   } else if (KEY) {
-    api({ action: 'list' }).then(function (d) { data.guests = d.guests || []; data.rsvps = d.rsvps || []; enter(); render(); })
+    api({ action: 'list' }).then(function (d) { data.guests = d.guests || []; data.rsvps = d.rsvps || []; showSheet(d); enter(); render(); })
       .catch(function () { ss.del('liam-admin-key'); KEY = ''; });
   }
 })();
